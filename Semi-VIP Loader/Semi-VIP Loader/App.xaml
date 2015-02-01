@@ -1,0 +1,28 @@
+﻿<Application x:Class="Semi_VIP_Loader.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!--body content datagrid cell vertical centering-->
+            <Style
+                                        TargetType="CheckBox"
+                                        BasedOn="{StaticResource MetroDataGridCheckBox}">
+                <EventSetter
+                                            Event="CheckBox.Checked"
+                                            Handler="DataGridCheckBoxColumn_Checked" />
+                <EventSetter
+                                            Event="CheckBox.Unchecked"
+                                            Handler="DataGridCheckBoxColumn_Checked" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
