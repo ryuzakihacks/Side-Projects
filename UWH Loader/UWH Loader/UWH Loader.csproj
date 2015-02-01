@@ -80,13 +80,13 @@
       <HintPath>References\InjectionLibrary.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework">
-      <HintPath>..\..\WarPlus+\WarPlus+\Metro Framwork DLLs\MetroFramework.dll</HintPath>
+      <HintPath>..\..\..\..\Visual Studio 2013\Reference\MetroFramework.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework.Design">
-      <HintPath>..\..\WarPlus+\WarPlus+\Metro Framwork DLLs\MetroFramework.Design.dll</HintPath>
+      <HintPath>..\..\..\..\Visual Studio 2013\Reference\MetroFramework.Design.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework.Fonts">
-      <HintPath>..\..\WarPlus+\WarPlus+\Metro Framwork DLLs\MetroFramework.Fonts.dll</HintPath>
+      <HintPath>..\..\..\..\Visual Studio 2013\Reference\MetroFramework.Fonts.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

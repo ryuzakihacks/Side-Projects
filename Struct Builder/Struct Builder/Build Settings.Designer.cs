@@ -1,6 +1,6 @@
 ﻿namespace Struct_Builder
 {
-    partial class Build_Settings
+    partial class BuildSettings
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Build_Settings));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BuildSettings));
             this.theme = new NSTheme();
             this.nsGroupBox1 = new NSGroupBox();
             this.checkbox_COMMENTS = new NSCheckBox();
@@ -154,7 +154,7 @@
             this.Controls.Add(this.theme);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Build_Settings";
+            this.Name = "BuildSettings";
             this.Text = "Build_Settings";
             this.theme.ResumeLayout(false);
             this.theme.PerformLayout();

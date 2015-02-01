@@ -1,41 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Struct_Builder
 {
-    public partial class Build_Settings : Form
+    public partial class BuildSettings : Form
     {
-        Main main;
-        public Build_Settings(Main th)
+        private readonly StructBuilderFunctions _func = new StructBuilderFunctions();
+        private readonly Main _main;
+        private readonly Tool _tools = new Tool();
+
+        public BuildSettings(Main th)
         {
             InitializeComponent();
-            main = th;
+            _main = th;
         }
-
-        StructBuilderFunctions func = new StructBuilderFunctions();
-        Tool tools = new Tool();
-        
 
         private void btn_SAVE_Click(object sender, EventArgs e)
         {
-            if(txtbox_NAME.Text != "")
+            if (txtbox_NAME.Text != "")
             {
-                main.Save_Dialog.FileName = "Struct.txt";
-                tools.SaveData(func.buildstruct(txtbox_NAME.Text, main.Struct_List_View, checkbox_HEX.Checked, checkbox_COMMENTS.Checked), main.Save_Dialog);
-                this.Close();
+                _main.Save_Dialog.FileName = "Struct.txt";
+                _tools.SaveData(
+                    _func.Buildstruct(txtbox_NAME.Text, _main.Struct_List_View, checkbox_HEX.Checked,
+                        checkbox_COMMENTS.Checked), _main.Save_Dialog);
+                Close();
             }
             else
             {
-                MessageBox.Show("Please enter a struct name!");
+                MessageBox.Show(@"Please enter a struct name!");
             }
-            
         }
-
-       
     }
 }

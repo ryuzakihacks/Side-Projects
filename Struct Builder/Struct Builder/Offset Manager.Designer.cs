@@ -1,6 +1,6 @@
 ﻿namespace Struct_Builder
 {
-    partial class Offset_Manager
+    partial class OffsetManager
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Offset_Manager));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OffsetManager));
             this.nsTheme1 = new NSTheme();
             this.txtbox_SIZE = new System.Windows.Forms.TextBox();
             this.txtbox_VALUE = new System.Windows.Forms.TextBox();
@@ -206,7 +206,7 @@
             this.Controls.Add(this.nsTheme1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Offset_Manager";
+            this.Name = "OffsetManager";
             this.Text = "Offset Manager";
             this.nsTheme1.ResumeLayout(false);
             this.nsTheme1.PerformLayout();

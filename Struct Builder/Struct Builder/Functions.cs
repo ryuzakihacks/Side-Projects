@@ -1,26 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Struct_Builder
 {
     //The class that will help us in building the struct.
-    class StructBuilderFunctions
+    public class StructBuilderFunctions
     {
         //A function that gets the char's size
-        private string getcharsize(string input)
+        private static string Getcharsize(string input)
         {
-            return Regex.Match(input,@"\d+").Value;
+            return Regex.Match(input, @"\d+").Value;
         }
 
         //A function that gets all of the offsets from the list view
-        public string[] getoffsets(NSListView listview)
+        public string[] Getoffsets(NSListView listview)
         {
-            string[] offsets = new string[listview.Items.Length];
-            for (int i = 0; i < listview.Items.Length; i++)
+            var offsets = new string[listview.Items.Length];
+            for (var i = 0; i < listview.Items.Length; i++)
             {
                 offsets[i] = listview.Items[i].SubItems[1].Text;
             }
@@ -28,10 +26,10 @@ namespace Struct_Builder
         }
 
         //A function that gets all of the names from the listview
-        public string[] getnames(NSListView listview)
+        public string[] Getnames(NSListView listview)
         {
-            string[] names = new string[listview.Items.Length];
-            for (int i = 0; i < listview.Items.Length; i++)
+            var names = new string[listview.Items.Length];
+            for (var i = 0; i < listview.Items.Length; i++)
             {
                 names[i] = listview.Items[i].SubItems[0].Text;
             }
@@ -39,9 +37,9 @@ namespace Struct_Builder
         }
 
         //A function that finds the name of the offset from the listview
-        private string findname(NSListView listview, string valuetosearch)
+        private static string Findname(NSListView listview, string valuetosearch)
         {
-            for(int i = 0; i < listview.Items.Length; i++)
+            for (var i = 0; i < listview.Items.Length; i++)
             {
                 if (listview.Items[i].SubItems[1].Text == valuetosearch)
                 {
@@ -52,9 +50,9 @@ namespace Struct_Builder
         }
 
         //A function that finds the data type of the offset from the listview
-        private string findtype(NSListView listview,string valuetosearch)
+        private static string Findtype(NSListView listview, string valuetosearch)
         {
-            for(int i = 0; i < listview.Items.Length; i++)
+            for (var i = 0; i < listview.Items.Length; i++)
             {
                 if (listview.Items[i].SubItems[1].Text == valuetosearch)
                 {
@@ -65,124 +63,127 @@ namespace Struct_Builder
         }
 
         //The main function
-       public string buildstruct(string name, NSListView listview, bool isInt, bool isComment)
+        public string Buildstruct(string name, NSListView listview, bool isInt, bool isComment)
         {
-           //======== Declare our global Variables ============
-           //The string that will hold our struct
+            //======== Declare our global Variables ============
+            //The string that will hold our struct
             string generatedstruct = null;
-           //The variable that will hold the last byte of the offset
+            //The variable that will hold the last byte of the offset
             uint lastbyte = 0;
-           //Just an add-on so we can have a unique name in unknownbytes. Even a random number/words will work
-            int unknowndatacount = 0;
-           //The variable that will hold the offsets
-            uint[] offsets = new uint[listview.Items.Length];
+            //Just an add-on so we can have a unique name in unknownbytes. Even a random number/words will work
+            var unknowndatacount = 0;
+            //The variable that will hold the offsets
+            var offsets = new uint[listview.Items.Length];
 
-           // ======= Where the magic begins ==========
-            
-           //Get the offsets from the list view then save it into our variable
-            for (int i = 0; i < listview.Items.Length; i++)
+            // ======= Where the magic begins ==========
+
+            //Get the offsets from the list view then save it into our variable
+            for (var i = 0; i < listview.Items.Length; i++)
             {
-                offsets[i] = Convert.ToUInt32(getoffsets(listview)[i], 16);
+                offsets[i] = Convert.ToUInt32(Getoffsets(listview)[i], 16);
             }
 
-           //Sort our array of offset from least to greatest
+            //Sort our array of offset from least to greatest
             Array.Sort(offsets);
 
-           //Write our headers
+            //Write our headers
             generatedstruct += "struct " + name + Environment.NewLine;
             generatedstruct += "{" + Environment.NewLine;
-           
-           //Loop all the offsets
-            for (int i = 0; i < offsets.Length; i++)
+
+            //Loop all the offsets
+            for (var i = 0; i < offsets.Length; i++)
             {
                 //Calculate the useless data that we have to skip
-                uint unknowndata = offsets[i] - lastbyte;
+                var unknowndata = offsets[i] - lastbyte;
                 //Dont write if there are no useless data
-                if(unknowndata != 0)
+                if (unknowndata != 0)
                 {
                     //Write the useless bytes we have to skip
-                    generatedstruct += "char UnknownData" + unknowndatacount.ToString() + "[";
-                    
+                    generatedstruct += "char UnknownData" + unknowndatacount + "[";
+
                     //If the user wants the unknowndata in integer format
-                    if(isInt)
-                        {
-                            generatedstruct += unknowndata.ToString() + "];";
+                    if (isInt)
+                    {
+                        generatedstruct += unknowndata + "];";
                         //If the user wants it to be commented    
                         if (isComment)
-                                generatedstruct += "    //0x" + lastbyte.ToString("X");
-                            
-                        }
+                            generatedstruct += "    //0x" + lastbyte.ToString("X");
+                    }
                     //If the user wants the unknowndata in hex format
-                        else
-                        {
-                            generatedstruct += "0x" + unknowndata.ToString("X") + "];";
-                            //If the user wants it to be commented
-                            if (isComment)
-                                generatedstruct += "  //0x" + lastbyte.ToString("X");
-                        }
-                        generatedstruct += Environment.NewLine;
+                    else
+                    {
+                        generatedstruct += "0x" + unknowndata.ToString("X") + "];";
+                        //If the user wants it to be commented
+                        if (isComment)
+                            generatedstruct += "  //0x" + lastbyte.ToString("X");
+                    }
+                    generatedstruct += Environment.NewLine;
                     //Add 1 to the count so we can have a unique name in the next loop
-                        unknowndatacount++;
+                    unknowndatacount++;
                 }
                 //Write the offsets
-                generatedstruct += findtype(listview, offsets[i].ToString("X")) + " " + findname(listview, offsets[i].ToString("X")) + ";";
+                generatedstruct += Findtype(listview, offsets[i].ToString("X")) + " " +
+                                   Findname(listview, offsets[i].ToString("X")) + ";";
                 //If the user wants it to be commented
                 if (isComment)
-                { generatedstruct += "    //0x" + offsets[i].ToString("X"); }
+                {
+                    generatedstruct += "    //0x" + offsets[i].ToString("X");
+                }
                 generatedstruct += Environment.NewLine;
-                   
+
                 //In here, we assign the value for lastbyte of the offset
-                switch (findtype(listview, offsets[i].ToString("X")))
+                switch (Findtype(listview, offsets[i].ToString("X")))
                 {
                     case "float":
-                        lastbyte = offsets[i] + sizeof(float);
+                        lastbyte = offsets[i] + sizeof (float);
                         break;
                     case "WORD":
-                        lastbyte = offsets[i] + sizeof(ushort);
+                        lastbyte = offsets[i] + sizeof (ushort);
                         break;
                     case "DWORD":
-                        lastbyte = offsets[i] + sizeof(uint);
+                        lastbyte = offsets[i] + sizeof (uint);
                         break;
                     case "BYTE":
-                        lastbyte = offsets[i] + sizeof(byte);
+                        lastbyte = offsets[i] + sizeof (byte);
                         break;
                     case "int":
-                        lastbyte = offsets[i] + sizeof(int);
+                        lastbyte = offsets[i] + sizeof (int);
                         break;
                 }
-                
+
                 // *Since the size of a char is not constant, getting it's size is different*
                 // Let's find the datatype with "CHAR"
-                if(findtype(listview, offsets[i].ToString("X")).Contains("CHAR"))
+                if (Findtype(listview, offsets[i].ToString("X")).Contains("CHAR"))
                 {
                     //If found, get it's size then add it to the offset so we can have the last byte of it.
-                    lastbyte = offsets[i] + (uint)(int)Convert.ToInt32(getcharsize(findname(listview, offsets[i].ToString("X")))); 
+                    lastbyte = offsets[i] +
+                               (uint) Convert.ToInt32(Getcharsize(Findname(listview, offsets[i].ToString("X"))));
                 }
             }
 
-           //Write our footer :]
-           generatedstruct += "};" + Environment.NewLine;
+            //Write our footer :]
+            generatedstruct += "};" + Environment.NewLine;
 
-           //Extract the generated struct
+            //Extract the generated struct
             return generatedstruct;
         }
     }
 
     //The class that helps us in navigating the program.
-    class Tool
+    internal class Tool
     {
         //Check if the string is only in hex format
         public bool OnlyHexInString(string test)
         {
             // For C-style hex notation (0xFF) you can use @"\A\b(0[xX])?[0-9a-fA-F]+\b\Z"
-            return System.Text.RegularExpressions.Regex.IsMatch(test, @"\A\b[0-9a-fA-F]+\b\Z");
+            return Regex.IsMatch(test, @"\A\b[0-9a-fA-F]+\b\Z");
         }
-        
+
         //Writes down the "Format"
         public string Serialize(NSListView listview)
         {
-           string value = null;
-            for(int i = 0; i < listview.Items.Length; i++)
+            string value = null;
+            for (var i = 0; i < listview.Items.Length; i++)
             {
                 value += "--" + Environment.NewLine;
                 value += listview.Items[i].Text + Environment.NewLine;
@@ -196,39 +197,33 @@ namespace Struct_Builder
         public void LoadData(NSListView listview, OpenFileDialog openfile)
         {
             openfile.InitialDirectory = GetFilePath();
-            string[] Datatypes = { "CHAR", "float", "WORD", "DWORD", "BYTE", "int" };
+            string[] datatypes = {"CHAR", "float", "WORD", "DWORD", "BYTE", "int"};
 
-          if(openfile.ShowDialog() == DialogResult.OK)
-          { 
-            RichTextBox rtb = new RichTextBox();
-            rtb.Text = File.ReadAllText(openfile.FileName);
-            int i= 0;
-           foreach(string line in rtb.Lines)
-           {
-               if (line == "--")
-               {
-                   for (int index = 0; index < Datatypes.Length; index++)
-                   {
-                       if (Datatypes[index] == rtb.Lines[i + 1] && OnlyHexInString(rtb.Lines[i + 3]))
-                       { listview.AddItem(rtb.Lines[i + 1], rtb.Lines[i + 2], rtb.Lines[i + 3].ToUpper()); }
-                   }
-                       
-               }
-               i++;
-           }
-          }
-            
+            if (openfile.ShowDialog() != DialogResult.OK) return;
+            var rtb = new RichTextBox {Text = File.ReadAllText(openfile.FileName)};
+            var i = 0;
+            foreach (var line in rtb.Lines)
+            {
+                if (line == "--")
+                {
+                    for (var index = 0; index < datatypes.Length; index++)
+                    {
+                        if (datatypes[index] == rtb.Lines[i + 1] && OnlyHexInString(rtb.Lines[i + 3]))
+                        {
+                            listview.AddItem(rtb.Lines[i + 1], rtb.Lines[i + 2], rtb.Lines[i + 3].ToUpper());
+                        }
+                    }
+                }
+                i++;
+            }
         }
 
-        
-
-        public bool isNameExists(string name, NSListView listview)
+        public bool IsNameExists(string name, NSListView listview)
         {
-            StructBuilderFunctions func = new StructBuilderFunctions();
-            string[] names = new string[listview.Items.Length];
-            for(int i = 0; i < listview.Items.Length; i++)
+            var func = new StructBuilderFunctions();
+            for (var i = 0; i < listview.Items.Length; i++)
             {
-                if (name == func.getnames(listview)[i])
+                if (name == func.Getnames(listview)[i])
                 {
                     return true;
                 }
@@ -236,28 +231,26 @@ namespace Struct_Builder
             return false;
         }
 
-        public bool isOffsetExists(string offset, NSListView listview)
+        public bool IsOffsetExists(string offset, NSListView listview)
         {
-            StructBuilderFunctions func = new StructBuilderFunctions();
-            for (int i = 0; i < listview.Items.Length; i++ )
+            var func = new StructBuilderFunctions();
+            for (var i = 0; i < listview.Items.Length; i++)
             {
-                if (offset == func.getoffsets(listview)[i])
+                if (offset == func.Getoffsets(listview)[i])
                 {
                     return true;
                 }
             }
-                return false;
+            return false;
         }
 
         //Saves the data from the list view
         public void SaveData(string data, SaveFileDialog savefile)
         {
             savefile.InitialDirectory = GetFilePath();
-            if(savefile.ShowDialog() == DialogResult.OK)
-            { 
+            if (savefile.ShowDialog() != DialogResult.OK) return;
             File.WriteAllText(savefile.FileName, data);
-            MessageBox.Show("Successfully Saved!");
-            }
+            MessageBox.Show(@"Successfully Saved!");
         }
 
         //Remove the selected item form the list view
@@ -269,9 +262,9 @@ namespace Struct_Builder
         //Clears all the items from the list view
         public void ClearAll(NSListView listview)
         {
-            int length = listview.Items.Length;
+            var length = listview.Items.Length;
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 listview.RemoveItemAt(0);
             }
@@ -283,12 +276,11 @@ namespace Struct_Builder
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
-        public void cleartextboxes(TextBox txtbox1, TextBox txtbox2,TextBox txtbox3)
+        public void Cleartextboxes(TextBox txtbox1, TextBox txtbox2, TextBox txtbox3)
         {
             txtbox1.Text = string.Empty;
             txtbox2.Text = string.Empty;
             txtbox3.Text = string.Empty;
         }
-
     }
 }

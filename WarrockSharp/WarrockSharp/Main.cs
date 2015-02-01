@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 using MetroFramework.Forms;
-using System.IO;
-using System.Reflection;
-using System.Diagnostics;
 
 namespace WarrockSharp
 {
@@ -22,42 +16,51 @@ namespace WarrockSharp
 
         public void LoadData()
         {
-            string[] Files = Directory.GetFiles(Application.StartupPath + @"\Assemblies", "*.dll");
-            foreach (string filepath in Files)
+            try
             {
-                try
+                var files = Directory.GetFiles(Application.StartupPath + @"\Assemblies", "*.dll");
+                foreach (var filepath in files)
                 {
-                    var info = FileVersionInfo.GetVersionInfo(filepath);
-                    if(info.OriginalFilename != null)
-                    { Grid_Assembly.Rows.Add(false, info.ProductName, info.FileVersion, info.CompanyName, info.FileName); }
-                    
-                }
-                catch
-                {
-
+                    try
+                    {
+                        var info = FileVersionInfo.GetVersionInfo(filepath);
+                        if (info.OriginalFilename != null)
+                        {
+                            Grid_Assembly.Rows.Add(false, info.ProductName, info.FileVersion, info.CompanyName,
+                                info.FileName);
+                        }
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
             }
+            catch
+            {
+                // ignored
+            }
+            
             Grid_Assembly.Columns[4].Visible = false;
         }
 
         private void Injection_Timer_Tick(object sender, EventArgs e)
         {
-            Process[] P = Process.GetProcessesByName("warrock");
+            var p = Process.GetProcessesByName("warrock");
             GC.Collect();
-            if (P.Length == 0) return;
+            if (p.Length == 0) return;
             Injection_Timer.Enabled = false;
             WindowState = FormWindowState.Minimized;
             ManagedInject.ProcessName = "warrock";
             Grid_Assembly.EndEdit();
-            foreach(DataGridViewRow row in Grid_Assembly.Rows)
+            foreach (DataGridViewRow row in Grid_Assembly.Rows)
             {
-                if (Convert.ToBoolean(row.Cells["column_Checked"].Value) == true)
+                if (Convert.ToBoolean(row.Cells["column_Checked"].Value))
                 {
                     ManagedInject.InjectCLR(row.Cells[4].Value.ToString());
                 }
             }
             Application.Exit();
-        } 
-
+        }
     }
 }

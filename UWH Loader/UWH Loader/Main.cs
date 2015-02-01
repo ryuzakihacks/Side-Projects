@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using MetroFramework.Forms;
-using MetroFramework;
 using System.IO;
+using System.Windows.Forms;
 using InjectionLibrary;
 using JLibrary.PortableExecutable;
-using System.Diagnostics;
+using MetroFramework;
+using MetroFramework.Forms;
+using UWH_Loader.Properties;
 
 namespace UWH_Loader
 {
@@ -21,24 +18,22 @@ namespace UWH_Loader
             InitializeComponent();
             LoadGridView();
             LoadSettings();
-            //Browser.Navigate("http://adf.ly/vgzP6");
-     
+            Browser.Navigate("http://adf.ly/vgzP6");
         }
-
 
         private void LoadSettings()
         {
-            Functions Function = new Functions(this);
-            Function.Load_Config("KNUCKLES", 0);
-            Function.Load_Config("COLT", 1);
-            Function.Load_Config("MP5",2);
-            Function.Load_Config("K2",3);
-            Function.Load_Config("SNIPER",4);
-            Function.Load_Config("HEAVY",5);
-            Function.Load_Config("MEDICKIT",6);
-            Function.Load_Config("SPANNER",7);
-            Function.Load_Config("GRENADE",8);
-            Function.Load_Config("TMA_1A",9);
+            var functions = new Functions(this);
+            functions.Load_Config("KNUCKLES", 0);
+            functions.Load_Config("COLT", 1);
+            functions.Load_Config("MP5", 2);
+            functions.Load_Config("K2", 3);
+            functions.Load_Config("SNIPER", 4);
+            functions.Load_Config("HEAVY", 5);
+            functions.Load_Config("MEDICKIT", 6);
+            functions.Load_Config("SPANNER", 7);
+            functions.Load_Config("GRENADE", 8);
+            functions.Load_Config("TMA_1A", 9);
         }
 
         private void LoadGridView()
@@ -56,14 +51,18 @@ namespace UWH_Loader
             Grid_Weapons.Columns[0].ReadOnly = true;
         }
 
-        
         private void btn_LoadSettings_Click(object sender, EventArgs e)
         {
-            Functions Function = new Functions(this);
-            File.WriteAllText(Path.GetTempPath() + "\\Config.ini", Function.WriteSettings());
+            var functions = new Functions(this);
+            File.WriteAllText(Path.GetTempPath() + "\\Config.ini", functions.WriteSettings());
             if (File.Exists(Path.GetTempPath() + "\\Config.ini"))
-            { MetroMessageBox.Show(this, "The Config File has been successfully saved!", "Loaded!"); }
-            else { MetroMessageBox.Show(this, "Error on saving the file!", "Error"); }
+            {
+                MetroMessageBox.Show(this, "The Config File has been successfully saved!", "Loaded!");
+            }
+            else
+            {
+                MetroMessageBox.Show(this, "Error on saving the file!", "Error");
+            }
         }
 
         private void Tile_FBPage_Click(object sender, EventArgs e)
@@ -73,54 +72,47 @@ namespace UWH_Loader
 
         private void Timer_Injection_Tick(object sender, EventArgs e)
         {
-            var StandardInjector = InjectionMethod.Create(InjectionMethodType.Standard);
-            Process[] TargetProcess = Process.GetProcessesByName("warrock");
-            if (TargetProcess.Length != 0)
+            var standardInjector = InjectionMethod.Create(InjectionMethodType.Standard);
+            var targetProcess = Process.GetProcessesByName("warrock");
+            if (targetProcess.Length == 0) return;
+            if (Variables.IsInjected) return;
+            var processId = Process.GetProcessesByName("warrock")[0].Id;
+            var img = new PortableExecutable(Resources.Empty);
+            var hModule = standardInjector.Inject(img, processId);
+            lbl_Status.Text = @"Status: Injecting...";
+            Variables.IsInjected = true;
+
+            if (hModule != IntPtr.Zero)
             {
-                if (VARIABLES.isInjected) return;
-                var processId = Process.GetProcessesByName("warrock")[0].Id;
-                var hModule = IntPtr.Zero;
-                var img = new PortableExecutable(Properties.Resources.Empty);
-                    hModule = StandardInjector.Inject(img, processId);
-                    lbl_Status.Text = "Status: Injecting...";
-                    VARIABLES.isInjected = true;
-                
-                if(hModule != IntPtr.Zero)
-                {
-                    MetroMessageBox.Show(this, "The hack has been Injected Successfully", "Injected");
-                    this.Close();
-                }
-                else
-                {
-                    MetroMessageBox.Show(this, "Something went wrong, can't inject the hack", "Error");
-                    this.Close();
-                }
+                MetroMessageBox.Show(this, "The hack has been Injected Successfully", "Injected");
+                Close();
+            }
+            else
+            {
+                MetroMessageBox.Show(this, "Something went wrong, can't inject the hack", "Error");
+                Close();
             }
         }
 
-
         private void Browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            if (Browser.Url.ToString() != "http://adf.ly/vgzP6")
-            {
-                Browser.Visible = false;
-                lbl_Status.ForeColor = Color.Green;
-                lbl_Status.BackColor = Color.Green;
-                lbl_Status.Text = "Status: Waiting for Warrock";
-                Timer_Injection.Start();
-            }
+            if (Browser.Url.ToString() == "http://adf.ly/vgzP6") return;
+            Browser.Visible = false;
+            lbl_Status.ForeColor = Color.Green;
+            lbl_Status.BackColor = Color.Green;
+            lbl_Status.Text = @"Status: Waiting for Warrock";
+            Timer_Injection.Start();
         }
 
         private void Tile_Credits_Click(object sender, EventArgs e)
         {
-            string Fuck;
-            Fuck = "Special Thanks To:" + Environment.NewLine;
-            Fuck += "@V3n0x" + Environment.NewLine;
-            Fuck += "@MJCreado" + Environment.NewLine;
-            Fuck += "@[W]eb[C]ombat" + Environment.NewLine;
-            Fuck += "@viperneo" + Environment.NewLine;
-            Fuck += "@Jason" + Environment.NewLine;
-            MetroMessageBox.Show(this, Fuck, "Credits");
+            var fuck = "Special Thanks To:" + Environment.NewLine;
+            fuck += "@V3n0x" + Environment.NewLine;
+            fuck += "@MJCreado" + Environment.NewLine;
+            fuck += "@[W]eb[C]ombat" + Environment.NewLine;
+            fuck += "@viperneo" + Environment.NewLine;
+            fuck += "@Jason" + Environment.NewLine;
+            MetroMessageBox.Show(this, fuck, "Credits");
         }
 
         private void Tile_Weaponcodes_Click(object sender, EventArgs e)
