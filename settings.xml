@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<InjectorSettings xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <Modules>
+    <InjectorModule>
+      <Enable>false</Enable>
+      <Path>C:\Users\admin\Documents\Visual Studio 2013\Projects\DirectEngine_[www.unknowncheats.me]__[www.unknowncheats.me]_\DM\dxhook.dll</Path>
+    </InjectorModule>
+    <InjectorModule>
+      <Enable>false</Enable>
+      <Path>C:\Users\admin\Desktop\Terb PH.dll</Path>
+    </InjectorModule>
+    <InjectorModule>
+      <Enable>true</Enable>
+      <Path>C:\Users\admin\Desktop\Terb PH Znoen Public Hack.dll</Path>
+    </InjectorModule>
+    <InjectorModule>
+      <Enable>false</Enable>
+      <Path>C:\Users\admin\Documents\Visual Studio 2013\Projects\Debug\Znoen Test Xign.dll</Path>
+    </InjectorModule>
+    <InjectorModule>
+      <Enable>true</Enable>
+      <Path>C:\Users\admin\Documents\Visual Studio 2013\Projects\Ultimate Binder\Release\Ultimate Binder.dll</Path>
+    </InjectorModule>
+  </Modules>
+  <Options>
+    <Advanced>
+      <DisableExceptionSupport>false</DisableExceptionSupport>
+      <DisableSEHValidation>false</DisableSEHValidation>
+      <HideFromDebugger>false</HideFromDebugger>
+      <ManualResolveImports>false</ManualResolveImports>
+    </Advanced>
+    <AutoInject>true</AutoInject>
+    <Background1>DodgerBlue</Background1>
+    <Background2>DeepSkyBlue</Background2>
+    <CloseOnInject>false</CloseOnInject>
+    <Delay>0</Delay>
+    <DelayBetween>0</DelayBetween>
+    <ErasePE>true</ErasePE>
+    <HideModule>true</HideModule>
+    <Method>4</Method>
+    <Scramble>
+      <CreateFakeDebugDirectory>false</CreateFakeDebugDirectory>
+      <CreateNewEntryPoint>false</CreateNewEntryPoint>
+      <InsertExtraSections>false</InsertExtraSections>
+      <ModifyAssemblyCode>false</ModifyAssemblyCode>
+      <ModifyImportTable>false</ModifyImportTable>
+      <MoveRelocationTable>false</MoveRelocationTable>
+      <RemoveDebugData>false</RemoveDebugData>
+      <RemoveUselessData>false</RemoveUselessData>
+      <RenameSections>false</RenameSections>
+      <ScrambleHeaderFields>false</ScrambleHeaderFields>
+      <ShiftSectionData>false</ShiftSectionData>
+      <ShiftSectionMemory>false</ShiftSectionMemory>
+      <StripSectionCharacteristics>false</StripSectionCharacteristics>
+    </Scramble>
+    <StealthInject>true</StealthInject>
+    <TextColor>White</TextColor>
+  </Options>
+  <ProcessName>warrock.exe</ProcessName>
+  <Warnings>
+    <LdrpLoadDll>false</LdrpLoadDll>
+    <ManualMap>false</ManualMap>
+    <Scramble>false</Scramble>
+  </Warnings>
+</InjectorSettings>
